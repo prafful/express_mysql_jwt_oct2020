@@ -1,21 +1,23 @@
-var express = require('express')
-var router = express.Router()
+var router = require('express').Router
+const { checkToken } = require("../../auth/token_validation");
+
 var {
         createFriendController, 
         loginFriendByEmailController,
         getFriendByIdController,
         getFriendsController,
         updateFriendController,
-        deleteFriendController
+        deleteFriendController,
+        welcome
 } = require('./friends.controller')
 
 
-
-router.get("/", getFriendsController)
-router.post("/", createFriendController)
-router.get("/:id", getFriendByIdController)
+router.get("/welcome", welcome)
+router.get("/", checkToken, getFriendsController)
+router.post("/", checkToken, createFriendController)
+router.get("/:id", checkToken, getFriendByIdController)
 router.post("/login", loginFriendByEmailController)
-router.patch("/",updateFriendController)
-router.delete("/", deleteFriendController)
+router.patch("/",checkToken, updateFriendController)
+router.delete("/", checkToken, deleteFriendController)
 
 module.exports = router
